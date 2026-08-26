@@ -110,7 +110,11 @@ class AutoAnkiApp:
         
         # Status Label & ProgressBar
         self.status_var = ctk.StringVar(value="Status: Ocioso")
-        self.status_label = ctk.CTkLabel(self.main_frame, textvariable=self.status_var, font=ctk.CTkFont(size=12, weight="bold"), text_color="gray70")
+        self.status_label = ctk.CTkLabel(
+            self.main_frame, textvariable=self.status_var,
+            font=ctk.CTkFont(size=12, weight="bold"), text_color="gray70",
+            justify="left", wraplength=390,
+        )
         self.status_label.pack(anchor="w", padx=10, pady=(0, 5))
         
         self.progress_bar = ctk.CTkProgressBar(self.main_frame, mode="indeterminate", height=6, progress_color="#E50914")
@@ -249,7 +253,12 @@ class AutoAnkiApp:
         self._settings_entry(ai_tab, "Endpoint compatível com OpenAI", "base_url")
         self._settings_entry(ai_tab, "Modelo de tradução", "ai_model")
         self._settings_entry(ai_tab, "Chave da API", "api_key", show="•")
-        self._settings_combo(ai_tab, "Modelo Whisper", "whisper_model", ["tiny", "base", "small", "medium", "large-v3"])
+        self._settings_combo(
+            ai_tab,
+            "Modelo Whisper",
+            "whisper_model",
+            ["small.en", "medium.en", "tiny.en", "base.en", "small", "medium", "large-v3", "turbo"],
+        )
 
         ai_row = ctk.CTkFrame(ai_tab, fg_color="transparent")
         ai_row.pack(fill="x", padx=14, pady=(8, 0))
@@ -369,17 +378,39 @@ class AutoAnkiApp:
         
     def _log_sniffer(self, string):
         s = string.lower()
-        if "baixando vídeo" in s:
+        transcription_progress = re.search(r"progresso_transcricao:\s*(\d+)%", s)
+        if transcription_progress:
+            percent = max(0, min(100, int(transcription_progress.group(1))))
+            details = string.split("|", 1)[1].strip() if "|" in string else ""
+            self.progress_bar.stop()
+            self.progress_bar.configure(mode="determinate")
+            self.progress_bar.set(percent / 100)
+            self.status_var.set(f"Transcrição: {percent}% — {details}")
+            self._update_stepper(2)
+        elif "baixando vídeo" in s:
             self.status_var.set("Status: Baixando vídeo (yt-dlp)...")
             self._update_stepper(1)
+        elif "preparando modelo whisper" in s:
+            self.status_var.set("Status: Preparando modelo Whisper (primeiro uso pode demorar)...")
+            self._update_stepper(2)
+        elif "modelo whisper" in s and "disponível" in s:
+            self.status_var.set("Status: Transcrevendo áudio (Whisper)...")
+            self._set_indeterminate_progress()
+            self._update_stepper(2)
         elif "transcrição local com whisper" in s:
             self.status_var.set("Status: Transcrevendo Áudio (Whisper)...")
             self._update_stepper(2)
         elif "iniciando tradução" in s:
             self.status_var.set("Status: Traduzindo Texto (Omniroute IA)...")
+            self._set_indeterminate_progress()
+            self._update_stepper(2)
+        elif "auditando cobertura de voz" in s:
+            self.status_var.set("Status: Auditando falas sem transcrição...")
+            self._set_indeterminate_progress()
             self._update_stepper(2)
         elif "fatiamento e exportação" in s:
             self.status_var.set("Status: Fatiando Mídias (FFmpeg)...")
+            self._set_indeterminate_progress()
             self._update_stepper(3)
         elif "adicionado ao anki" in s:
             self.status_var.set("Status: Inserindo no Anki...")
@@ -387,6 +418,11 @@ class AutoAnkiApp:
         elif "limpando" in s:
             self.status_var.set("Status: Limpando Lixeira...")
             self._update_stepper(0)
+
+    def _set_indeterminate_progress(self):
+        self.progress_bar.stop()
+        self.progress_bar.configure(mode="indeterminate")
+        self.progress_bar.start()
             
     def load_anki_data(self):
         print("Conectando ao Anki...\n")
@@ -560,6 +596,7 @@ class AutoAnkiApp:
         self._set_local_controls_state("disabled")
         
         self.status_var.set("Status: Inicializando Pipeline...")
+        self.progress_bar.configure(mode="indeterminate")
         self.progress_bar.start() # Inicia animação da barra
         
         self.log_text.delete("0.0", "end")
@@ -640,6 +677,7 @@ class AutoAnkiApp:
             
     def _unlock_ui(self):
         self.progress_bar.stop()
+        self.progress_bar.configure(mode="indeterminate")
         self.progress_bar.set(0)
         self.start_btn.configure(state="normal", image=self.img_play)
         self.url_entry.configure(state="normal")

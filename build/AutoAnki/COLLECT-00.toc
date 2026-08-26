@@ -3668,6 +3668,10 @@
    'C:\\dev\\Auto Movies '
    'Anki\\venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\utility\\utility_functions.py',
    'DATA'),
+  ('faster_whisper\\assets\\silero_vad_v6.onnx',
+   'C:\\dev\\Auto Movies '
+   'Anki\\venv\\Lib\\site-packages\\faster_whisper\\assets\\silero_vad_v6.onnx',
+   'DATA'),
   ('hf_xet\\hf_xet.pyd',
    'C:\\dev\\Auto Movies Anki\\venv\\Lib\\site-packages\\hf_xet\\hf_xet.pyd',
    'EXTENSION'),

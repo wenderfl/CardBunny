@@ -1,6 +1,6 @@
 {
   "anki": {
-    "deck_name": "Movies",
+    "deck_name": "Final Destination",
     "model_name": "Clips audio 🔉",
     "url": "http://127.0.0.1:8765"
   },
@@ -11,9 +11,19 @@
     "model": "combo"
   },
   "whisper": {
-    "model_size": "base",
+    "model_size": "medium.en",
     "device": "cpu",
     "compute_type": "int8",
     "cpu_threads": 14
+  },
+  "field_mappings": {
+    "Clips audio 🔉": {
+      "english_subtitle": "Frase",
+      "portuguese_subtitle": "Tradução",
+      "snapshot": "Imgem",
+      "audio": "Audio",
+      "clip": "Clip",
+      "index": "index"
+    }
   }
 }

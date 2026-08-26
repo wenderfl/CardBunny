@@ -1,5 +1,6 @@
 yt-dlp
 faster-whisper
+hf-xet
 openai
 requests
 pysrt

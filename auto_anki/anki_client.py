@@ -4,7 +4,9 @@ from auto_anki.config import CONFIG
 def invoke_anki(action, **params):
     request = {'action': action, 'version': 6, 'params': params}
     try:
-        response = requests.post(CONFIG['anki']['url'], json=request).json()
+        http_response = requests.post(CONFIG['anki']['url'], json=request, timeout=30)
+        http_response.raise_for_status()
+        response = http_response.json()
         if len(response) != 2:
             raise Exception('Response has an unexpected number of fields')
         if 'error' not in response:

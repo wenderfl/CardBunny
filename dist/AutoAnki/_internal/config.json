@@ -11,7 +11,7 @@
     "model": "combo"
   },
   "whisper": {
-    "model_size": "base",
+    "model_size": "medium.en",
     "device": "cpu",
     "compute_type": "int8",
     "cpu_threads": 14

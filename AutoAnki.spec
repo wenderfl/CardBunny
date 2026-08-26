@@ -1,5 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+from PyInstaller.utils.hooks import collect_data_files
+
 
 a = Analysis(
     ['main.py'],
@@ -8,8 +10,8 @@ a = Analysis(
     datas=[
         ('venv/Lib/site-packages/customtkinter', 'customtkinter'),
         ('config.json', '.'),
-    ],
-    hiddenimports=[],
+    ] + collect_data_files('faster_whisper'),
+    hiddenimports=['hf_xet'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
