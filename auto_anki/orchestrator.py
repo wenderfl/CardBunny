@@ -7,7 +7,7 @@ from auto_anki.transcriber import transcribe_video
 from auto_anki.translator import translate_srt
 from auto_anki.media_processor import slice_and_export_to_anki
 
-def run_pipeline(url, local_video=None, local_srt_en=None, local_srt_pt=None):
+def run_pipeline(url, local_video=None, local_srt_en=None, local_srt_pt=None, field_mapping=None):
     """
     Executa o pipeline completo de processamento.
 
@@ -70,7 +70,11 @@ def run_pipeline(url, local_video=None, local_srt_en=None, local_srt_pt=None):
             srt_pt = translate_srt(srt_en, work_dir)
 
         # ── ETAPA 4: Fatiar e exportar para o Anki ───────────────────────────
-        slice_and_export_to_anki(video_path, srt_en, srt_pt, CONFIG['anki']['deck_name'], work_dir)
+        selected_mapping = field_mapping or CONFIG.get('field_mappings', {}).get(CONFIG['anki']['model_name'])
+        slice_and_export_to_anki(
+            video_path, srt_en, srt_pt, CONFIG['anki']['deck_name'], work_dir,
+            field_mapping=selected_mapping,
+        )
         print("Concluído com sucesso!")
         return True, work_dir
 

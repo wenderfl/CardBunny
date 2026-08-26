@@ -3271,6 +3271,7 @@
    'C:\\dev\\Auto Movies '
    'Anki\\venv\\Lib\\site-packages\\click-8.5.0.dist-info\\licenses\\LICENSE.txt',
    'DATA'),
+  ('config.json', 'C:\\dev\\Auto Movies Anki\\config.json', 'DATA'),
   ('ctranslate2\\_ext.cp313-win_amd64.pyd',
    'C:\\dev\\Auto Movies '
    'Anki\\venv\\Lib\\site-packages\\ctranslate2\\_ext.cp313-win_amd64.pyd',

@@ -80,7 +80,7 @@
  [],
  False,
  False,
- 1787770328,
+ 1787772755,
  [('runw.exe',
    'C:\\dev\\Auto Movies '
    'Anki\\venv\\Lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\runw.exe',

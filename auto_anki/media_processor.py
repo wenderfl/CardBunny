@@ -22,7 +22,7 @@ def _get_worker_count():
     # Cap em 16 para não criar contenção excessiva de I/O
     return min(workers, 16)
 
-def slice_and_export_to_anki(video_path, srt_en, srt_pt, deck_name, work_dir):
+def slice_and_export_to_anki(video_path, srt_en, srt_pt, deck_name, work_dir, field_mapping=None):
     print(f"Iniciando fatiamento e exportação para o Anki...")
     print(f"Paralelismo configurado: {_get_worker_count()} workers em {_CPU_COUNT} núcleos disponíveis.")
     
@@ -30,7 +30,7 @@ def slice_and_export_to_anki(video_path, srt_en, srt_pt, deck_name, work_dir):
     invoke_anki('createDeck', deck=deck_name)
     
     # Mapear campos do modelo automaticamente
-    dynamic_fields = map_fields(CONFIG['anki']['model_name'])
+    dynamic_fields = field_mapping or map_fields(CONFIG['anki']['model_name'])
     if not dynamic_fields:
         print("Erro crítico: Falha ao mapear os campos. Abortando exportação.")
         return
@@ -222,6 +222,5 @@ def slice_and_export_to_anki(video_path, srt_en, srt_pt, deck_name, work_dir):
 
 def format_srt_time_ffmpeg(srt_time):
     return f"{srt_time.hours:02d}:{srt_time.minutes:02d}:{srt_time.seconds:02d}.{srt_time.milliseconds:03d}"
-
 
 

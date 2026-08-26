@@ -12,6 +12,7 @@ from ui.redirector import StdoutRedirector
 from auto_anki.config import CONFIG, save_config
 from auto_anki.anki_client import invoke_anki
 from auto_anki.orchestrator import run_pipeline
+from auto_anki.mapper import _map_fields_heuristic
 
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("blue")
@@ -437,11 +438,121 @@ class AutoAnkiApp:
             
         if "Carregando" in deck or "Erro" in deck:
             return
-            
+
+        self.open_field_preview(url, deck, model)
+
+    def open_field_preview(self, url, deck, model):
+        """Mostra e permite editar o destino de cada dado antes do pipeline."""
+        fields = invoke_anki('modelFieldNames', modelName=model)
+        if not fields:
+            messagebox.showerror("Campos do deck", f"Não foi possível obter os campos do modelo '{model}'.")
+            return
+
+        if hasattr(self, "field_preview_window") and self.field_preview_window.winfo_exists():
+            self.field_preview_window.destroy()
+
+        window = ctk.CTkToplevel(self.root)
+        self.field_preview_window = window
+        window.title("Prévia dos campos")
+        window.geometry("590x620")
+        window.minsize(520, 500)
+        window.configure(fg_color="#141414")
+        window.transient(self.root)
+        window.grab_set()
+
+        ctk.CTkLabel(
+            window, text="Prévia dos campos", font=ctk.CTkFont(size=22, weight="bold")
+        ).pack(anchor="w", padx=24, pady=(22, 2))
+        ctk.CTkLabel(
+            window, text=f"Modelo: {model}\nEscolha o conteúdo que cada campo receberá.",
+            justify="left", text_color="gray60",
+        ).pack(anchor="w", padx=24, pady=(0, 14))
+
+        source_labels = {
+            "Não preencher": None,
+            "Áudio da cena (MP3)": "audio",
+            "Clipe de vídeo (WebM)": "clip",
+            "Imagem da cena (JPG)": "snapshot",
+            "Legenda original": "english_subtitle",
+            "Legenda traduzida": "portuguese_subtitle",
+            "Identificador do card": "index",
+        }
+        self.field_source_labels = source_labels
+
+        saved = CONFIG.get('field_mappings', {}).get(model, {})
+        valid_saved = {
+            slot: field for slot, field in saved.items()
+            if field in fields and slot in source_labels.values()
+        }
+        suggested = valid_saved or _map_fields_heuristic(fields)
+        field_to_slot = {field: slot for slot, field in suggested.items() if field}
+        slot_to_label = {slot: label for label, slot in source_labels.items()}
+
+        list_frame = ctk.CTkScrollableFrame(window, fg_color="#202020", corner_radius=12)
+        list_frame.pack(fill="both", expand=True, padx=20, pady=(0, 14))
+        list_frame.grid_columnconfigure(1, weight=1)
+        self.field_mapping_vars = {}
+
+        for row, field in enumerate(fields):
+            ctk.CTkLabel(
+                list_frame, text=field, anchor="w", font=ctk.CTkFont(size=12, weight="bold")
+            ).grid(row=row, column=0, padx=(10, 14), pady=7, sticky="w")
+            initial_label = slot_to_label.get(field_to_slot.get(field), "Não preencher")
+            variable = ctk.StringVar(value=initial_label)
+            self.field_mapping_vars[field] = variable
+            ctk.CTkComboBox(
+                list_frame, variable=variable, values=list(source_labels.keys()),
+                state="readonly", height=34, fg_color="#303030", border_width=0,
+                dropdown_fg_color="#303030",
+            ).grid(row=row, column=1, padx=(0, 10), pady=7, sticky="ew")
+
+        ctk.CTkLabel(
+            window,
+            text="Cada tipo de conteúdo pode ser atribuído a apenas um campo.",
+            text_color="gray55", font=ctk.CTkFont(size=10),
+        ).pack(anchor="w", padx=24, pady=(0, 10))
+
+        footer = ctk.CTkFrame(window, fg_color="transparent")
+        footer.pack(fill="x", padx=20, pady=(0, 20))
+        ctk.CTkButton(
+            footer, text="Voltar", width=100, fg_color="#333333", hover_color="#444444",
+            command=window.destroy,
+        ).pack(side="right", padx=(8, 0))
+        ctk.CTkButton(
+            footer, text="Confirmar e iniciar", width=155, fg_color="#E50914", hover_color="#B20710",
+            command=lambda: self._confirm_field_preview(url, deck, model),
+        ).pack(side="right")
+
+    def _confirm_field_preview(self, url, deck, model):
+        field_mapping = {}
+        for field, variable in self.field_mapping_vars.items():
+            slot = self.field_source_labels[variable.get()]
+            if slot is None:
+                continue
+            if slot in field_mapping:
+                label = variable.get()
+                messagebox.showerror(
+                    "Campos do deck", f"'{label}' foi atribuído a mais de um campo.",
+                    parent=self.field_preview_window,
+                )
+                return
+            field_mapping[slot] = field
+
+        if not field_mapping:
+            messagebox.showerror(
+                "Campos do deck", "Configure ao menos um campo antes de iniciar.",
+                parent=self.field_preview_window,
+            )
+            return
+
         CONFIG['anki']['deck_name'] = deck
         CONFIG['anki']['model_name'] = model
+        CONFIG.setdefault('field_mappings', {})[model] = field_mapping
         save_config(CONFIG)
-        
+        self.field_preview_window.destroy()
+        self._begin_processing(url, field_mapping)
+
+    def _begin_processing(self, url, field_mapping):
         self.start_btn.configure(state="disabled", image=self.img_wait)
         self.url_entry.configure(state="disabled")
         self.deck_cb.configure(state="disabled")
@@ -456,14 +567,17 @@ class AutoAnkiApp:
         
         threading.Thread(
             target=self._run_pipeline_thread,
-            args=(url, self.local_video_path, self.local_srt_path),
+            args=(url, self.local_video_path, self.local_srt_path, field_mapping),
             daemon=True,
         ).start()
         
-    def _run_pipeline_thread(self, url, local_video=None, local_srt=None):
+    def _run_pipeline_thread(self, url, local_video=None, local_srt=None, field_mapping=None):
         work_dir = None
         try:
-            success, work_dir = run_pipeline(url, local_video=local_video, local_srt_en=local_srt)
+            success, work_dir = run_pipeline(
+                url, local_video=local_video, local_srt_en=local_srt,
+                field_mapping=field_mapping,
+            )
             self.root.after(0, lambda s=success, w=work_dir: self._handle_completion(s, w))
         except Exception as e:
             import traceback

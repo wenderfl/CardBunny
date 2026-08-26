@@ -2,7 +2,6 @@ class StdoutRedirector:
     def __init__(self, text_widget, callback=None):
         self.text_widget = text_widget
         self.callback = callback
-        self.buffer = ""
 
     def write(self, string):
         # yt-dlp costuma usar \r para atualizar a mesma linha.
@@ -24,4 +23,3 @@ class StdoutRedirector:
 
     def flush(self):
         pass
-
