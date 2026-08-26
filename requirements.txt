@@ -1,0 +1,6 @@
+yt-dlp
+faster-whisper
+openai
+requests
+pysrt
+customtkinter

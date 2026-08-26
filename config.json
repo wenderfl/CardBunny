@@ -1,0 +1,19 @@
+{
+  "anki": {
+    "deck_name": "Movies",
+    "model_name": "Clips audio 🔉",
+    "url": "http://127.0.0.1:8765"
+  },
+  "translation": {
+    "service": "omniroute",
+    "base_url": "http://localhost:20128/v1",
+    "api_key": "sk-91d3746c342d6cf3-cc6e99-1fa3d1c0",
+    "model": "combo"
+  },
+  "whisper": {
+    "model_size": "base",
+    "device": "cpu",
+    "compute_type": "int8",
+    "cpu_threads": 14
+  }
+}
