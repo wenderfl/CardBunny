@@ -5,18 +5,18 @@ from openai import OpenAI
 from auto_anki.anki_client import invoke_anki
 from auto_anki.config import CONFIG
 
-# Descrição de cada slot para a IA entender o que deve encontrar
+# Description of each slot for the AI to understand what it should find
 SLOT_DESCRIPTIONS = {
-    "audio":               "Campo que armazena o ARQUIVO DE ÁUDIO (mp3) da cena — usado para reproduzir som no card.",
-    "clip":                "Campo que armazena o ARQUIVO DE VÍDEO (webm) da cena — usado para reproduzir o clipe no card.",
-    "snapshot":            "Campo que armazena a IMAGEM (jpg/png) do frame da cena — usado como thumbnail/foto.",
-    "english_subtitle":    "Campo que armazena o TEXTO/FRASE em INGLÊS da cena — frente do card ou expressão original.",
-    "portuguese_subtitle": "Campo que armazena a TRADUÇÃO em PORTUGUÊS (pt-br) da cena — verso do card ou significado.",
-    "index":               "Campo que armazena um IDENTIFICADOR ÚNICO do card (pode conter o nome do arquivo de vídeo).",
+    "audio":               "Field that stores the AUDIO FILE (mp3) of the scene — used to play sound in the card.",
+    "clip":                "Field that stores the VIDEO FILE (mp4) of the scene — used to play the clip in the card.",
+    "snapshot":            "Field that stores the IMAGE (jpg/png) of the scene frame — used as thumbnail/photo.",
+    "english_subtitle":    "Field that stores the ORIGINAL TEXT/PHRASE (source language) of the scene — front of the card.",
+    "portuguese_subtitle": "Field that stores the TRANSLATION (target language) of the scene — back of the card or meaning.",
+    "index":               "Field that stores a UNIQUE IDENTIFIER of the card (may contain the video filename).",
 }
 
 def normalize_string(s):
-    """Remove acentos, caracteres especiais e deixa minúsculo."""
+    """Removes accents, special characters and makes it lowercase."""
     if not s:
         return ""
     s = str(s).lower().strip()
@@ -26,8 +26,8 @@ def normalize_string(s):
 
 def _map_fields_with_ai(fields):
     """
-    Usa a IA local (Omniroute) para mapear os campos do modelo Anki aos slots internos.
-    Retorna um dict {slot: field_name} ou None em caso de falha.
+    Uses local AI (Omniroute) to map Anki model fields to internal slots.
+    Returns a dict {slot: field_name} or None on failure.
     """
     try:
         client = OpenAI(
@@ -36,50 +36,50 @@ def _map_fields_with_ai(fields):
         )
         model = CONFIG['translation']['model']
 
-        # Construir o prompt com os nomes dos campos e as descrições dos slots
+        # Build the prompt with field names and slot descriptions
         slots_desc = "\n".join([f'  - "{slot}": {desc}' for slot, desc in SLOT_DESCRIPTIONS.items()])
         fields_list = "\n".join([f'  - "{f}"' for f in fields])
 
-        prompt = f"""Você é um assistente especialista em Anki. Abaixo estão os campos de um modelo de card do Anki:
+        prompt = f"""You are an Anki expert assistant. Below are the fields of an Anki card model:
 
-CAMPOS DISPONÍVEIS:
+AVAILABLE FIELDS:
 {fields_list}
 
-SLOTS INTERNOS (que preciso preencher):
+INTERNAL SLOTS (that I need to fill):
 {slots_desc}
 
-TAREFA: Analise semanticamente os nomes dos campos e mapeie cada CAMPO para o SLOT mais adequado.
-- Cada slot deve receber no máximo UM campo.
-- Slots que não tiverem um campo compatível devem ter valor null.
-- Retorne APENAS um objeto JSON válido, sem explicações, sem markdown, sem blocos de código.
+TASK: Semantically analyze the field names and map each FIELD to the most suitable SLOT.
+- Each slot must receive at most ONE field.
+- Slots without a compatible field must have a null value.
+- Return ONLY a valid JSON object, without explanations, without markdown, without code blocks.
 
-Formato de saída esperado:
-{{"audio": "Nome do Campo", "clip": "Nome do Campo", "snapshot": "Nome do Campo", "english_subtitle": "Nome do Campo", "portuguese_subtitle": "Nome do Campo", "index": "Nome do Campo ou null"}}"""
+Expected output format:
+{{"audio": "Field Name", "clip": "Field Name", "snapshot": "Field Name", "english_subtitle": "Field Name", "portuguese_subtitle": "Field Name", "index": "Field Name or null"}}"""
 
         response = client.chat.completions.create(
             model=model,
             messages=[
-                {"role": "system", "content": "Você é um assistente técnico especializado em Anki. Responda APENAS com JSON válido."},
+                {"role": "system", "content": "You are a technical assistant specialized in Anki. Reply ONLY with valid JSON."},
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.0  # Determinístico para mapeamento
+            temperature=0.0  # Deterministic for mapping
         )
 
         raw = response.choices[0].message.content.strip()
-        # Limpar possível markdown residual
+        # Clean possible residual markdown
         raw = re.sub(r'^```[a-z]*\n?', '', raw)
         raw = re.sub(r'\n?```$', '', raw)
         raw = raw.strip()
 
         result = json.loads(raw)
 
-        # Validar que as chaves esperadas estão presentes
+        # Validate that the expected keys are present
         expected_slots = set(SLOT_DESCRIPTIONS.keys())
         if not expected_slots.issubset(result.keys()):
-            print("Aviso: resposta da IA incompleta, tentando fallback heurístico.")
+            print("Warning: AI response incomplete, trying heuristic fallback.")
             return None
 
-        # Converter "null" string para None
+        # Convert "null" string to None
         for k, v in result.items():
             if v == "null" or v == "" or (v not in fields and v is not None):
                 result[k] = None
@@ -87,15 +87,15 @@ Formato de saída esperado:
         return result
 
     except json.JSONDecodeError as e:
-        print(f"Aviso: IA retornou JSON inválido ({e}). Tentando fallback heurístico.")
+        print(f"Warning: AI returned invalid JSON ({e}). Trying heuristic fallback.")
         return None
     except Exception as e:
-        print(f"Aviso: IA indisponível para mapeamento de campos ({e}). Tentando fallback heurístico.")
+        print(f"Warning: AI unavailable for field mapping ({e}). Trying heuristic fallback.")
         return None
 
 def _map_fields_heuristic(fields):
     """
-    Fallback: mapeia campos por palavras-chave quando a IA não está disponível.
+    Fallback: maps fields by keywords when AI is unavailable.
     """
     mapping = {
         'audio': None,
@@ -108,7 +108,7 @@ def _map_fields_heuristic(fields):
 
     keywords = {
         'audio':               ['audio', 'som', 'sound', 'mp3'],
-        'clip':                ['clip', 'video', 'media', 'webm'],
+        'clip':                ['clip', 'video', 'media', 'mp4'],
         'snapshot':            ['img', 'imag', 'picture', 'pic', 'foto', 'snapshot', 'screen'],
         'english_subtitle':    ['frase', 'expression', 'english', 'ingles', 'front', 'frente', 'texto', 'legenda'],
         'portuguese_subtitle': ['trad', 'meaning', 'portugues', 'back', 'verso', 'significado'],
@@ -128,38 +128,38 @@ def _map_fields_heuristic(fields):
 
 def map_fields(model_name):
     """
-    Mapeia os campos do modelo Anki aos slots internos do sistema.
+    Maps the Anki model fields to the internal system slots.
     
-    Slots internos e sua formatação final no card:
-      - audio:               [sound:vid_...mp3]   (áudio mp3 com tag [sound:])
-      - clip:                vid_...webm           (vídeo webm, apenas o nome do arquivo)
-      - snapshot:            <img src="vid_...jpg"> (imagem do frame)
-      - english_subtitle:    texto em inglês
-      - portuguese_subtitle: texto em português
-      - index:               [sound:vid_...webm]  (vídeo webm com tag [sound:])
+    Internal slots and their final formatting in the card:
+      - audio:               [sound:vid_...mp3]   (mp3 audio with [sound:] tag)
+      - clip:                vid_...mp4           (mp4 video, only the filename)
+      - snapshot:            <img src="vid_...jpg"> (frame image)
+      - english_subtitle:    original text
+      - portuguese_subtitle: translated text
+      - index:               [sound:vid_...mp4]  (mp4 video with [sound:] tag)
     """
-    print("Obtendo campos do modelo Anki...")
+    print("Getting Anki model fields...")
     fields = invoke_anki('modelFieldNames', modelName=model_name)
     if not fields:
-        print(f"Erro: Não foi possível obter os campos do modelo '{model_name}'.")
+        print(f"Error: Could not get fields for model '{model_name}'.")
         return {}
 
-    print(f"Campos encontrados: {fields}")
-    print("Mapeando campos com IA local (Omniroute)...")
+    print(f"Found fields: {fields}")
+    print("Mapping fields with local AI (Omniroute)...")
 
     mapping = _map_fields_with_ai(fields)
 
     if mapping:
-        print(f"Mapeamento via IA concluído: {mapping}")
+        print(f"Mapping via AI completed: {mapping}")
     else:
-        print("Usando mapeamento heurístico como fallback...")
+        print("Using heuristic mapping as fallback...")
         mapping = _map_fields_heuristic(fields)
-        print(f"Mapeamento heurístico concluído: {mapping}")
+        print(f"Heuristic mapping completed: {mapping}")
 
-    # Exibir resultado final de forma legível
-    print("─── Mapeamento de Campos ───")
+    # Display final result in a readable format
+    print("─── Field Mapping ───")
     for slot, field in mapping.items():
-        status = f"→ \"{field}\"" if field else "→ [não encontrado]"
+        status = f"→ \"{field}\"" if field else "→ [not found]"
         print(f"  {slot:20s} {status}")
     print("───────────────────────────")
 

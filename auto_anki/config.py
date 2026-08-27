@@ -4,7 +4,7 @@ import shutil
 import sys
 
 def _config_path():
-    """Usa a pasta do executável na build e a raiz do projeto no desenvolvimento."""
+    """Uses the executable folder in build and the project root in development."""
     if getattr(sys, "frozen", False):
         base_dir = os.path.dirname(sys.executable)
     else:

@@ -17,6 +17,6 @@ def invoke_anki(action, **params):
             raise Exception(response['error'])
         return response['result']
     except Exception as e:
-        print(f"Erro ao comunicar com AnkiConnect: {e}")
-        print(">>> AVISO: CERTIFIQUE-SE DE QUE O ANKI ESTÁ ABERTO! <<<")
+        print(f"Error communicating with AnkiConnect: {e}")
+        print(">>> WARNING: MAKE SURE ANKI IS OPEN! <<<")
         return None

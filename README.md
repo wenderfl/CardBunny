@@ -1,4 +1,10 @@
-# Auto Movies Anki
+<p align="center">
+  <img src="logo_main.png" width="250" height="250">
+  
+</p>
+
+<h1 align="center">CardBunny</h1>
+#AI-Powered Language Learning from Videos with Anki
 
 O Auto Movies Anki transforma cenas de vídeos em cards do Anki com:
 

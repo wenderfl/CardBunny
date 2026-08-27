@@ -4,13 +4,13 @@ class StdoutRedirector:
         self.callback = callback
 
     def write(self, string):
-        # yt-dlp costuma usar \r para atualizar a mesma linha.
-        # Nós vamos substituir \r por \n para não criar uma linha infinita no Tkinter.
+        # yt-dlp often uses \r to update the same line.
+        # We replace \r with \n to avoid creating an infinite line in Tkinter.
         sanitized = string.replace('\r', '\n')
         try:
             self.text_widget.after(0, self._safe_write, sanitized)
         except Exception:
-            pass  # Widget pode ter sido destruído, ignora silenciosamente
+            pass  # Widget might have been destroyed, ignore silently
 
     def _safe_write(self, string):
         try:
@@ -19,7 +19,7 @@ class StdoutRedirector:
             if self.callback:
                 self.callback(string)
         except Exception:
-            pass  # Widget pode ter sido destruído
+            pass  # Widget might have been destroyed
 
     def flush(self):
         pass

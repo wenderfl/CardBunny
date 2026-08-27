@@ -8,9 +8,9 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        ('venv/Lib/site-packages/customtkinter', 'customtkinter'),
         ('config.json', '.'),
-    ] + collect_data_files('faster_whisper'),
+        ('icon.ico', '.'),
+    ] + collect_data_files('customtkinter') + collect_data_files('faster_whisper'),
     hiddenimports=['hf_xet'],
     hookspath=[],
     hooksconfig={},
