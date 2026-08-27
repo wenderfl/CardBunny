@@ -31,18 +31,18 @@ class AutoAnkiApp:
         self.root.title("Auto Movies Anki")
         self.root.geometry("450x720")
         self.root.minsize(450, 680)
-        
+
         # Set window icon
         icon_path = resource_path("icon.ico")
         if os.path.exists(icon_path):
             self.root.iconbitmap(icon_path)
-        
+
         # Dark Cinematic Background
         self.root.configure(fg_color="#FFFFFF")
-        
+
         self.root.grid_columnconfigure(0, weight=1)
         self.root.grid_rowconfigure(1, weight=1)
-        
+
         # Initialize Icons
         self.img_link = ctk.CTkImage(light_image=create_link_icon(color="#111111"), dark_image=create_link_icon(color="#111111"), size=(24, 24))
         self.img_deck = ctk.CTkImage(light_image=create_deck_icon(color="white"), dark_image=create_deck_icon(color="white"), size=(24, 24))
@@ -50,11 +50,11 @@ class AutoAnkiApp:
         self.img_play = ctk.CTkImage(light_image=create_play_icon(color="#111111"), dark_image=create_play_icon(color="#111111"), size=(36, 36))
         self.img_wait = ctk.CTkImage(light_image=create_wait_icon(color="#111111"), dark_image=create_wait_icon(color="#111111"), size=(36, 36))
         self.img_settings = ctk.CTkImage(light_image=create_settings_icon(color="#111111"), dark_image=create_settings_icon(color="#111111"), size=(18, 18))
-        
+
         # Branding
         self.brand_frame = ctk.CTkFrame(self.root, fg_color="transparent")
         self.brand_frame.grid(row=0, column=0, sticky="ew", padx=30, pady=(30, 20))
-        
+
         self.app_title_label = ctk.CTkLabel(
             self.brand_frame, text="AUTO MOVIES\nANKI", 
             font=ctk.CTkFont(family="Arial", size=26, weight="bold"), 
@@ -87,7 +87,7 @@ class AutoAnkiApp:
         self.url_var = ctk.StringVar()
         self.url_entry = ctk.CTkEntry(
             self.url_frame, textvariable=self.url_var, height=42, font=ctk.CTkFont(size=14, weight="bold"), 
-            placeholder_text="PASTE YOUTUBE LINK...", placeholder_text_color="#888888",
+            placeholder_text="PASTE YOUTUBE LINK...", placeholder_text_color="#555555",
             corner_radius=0, fg_color="#FFFFFF", border_width=3, border_color="#000000", text_color="#111111"
         )
         self.url_entry.pack(side="left", fill="x", expand=True)
@@ -162,16 +162,16 @@ class AutoAnkiApp:
         
         self.stepper_frame.grid_columnconfigure((0, 1, 2, 3), weight=1)
         
-        self.step_1 = ctk.CTkButton(self.stepper_frame, text="1. DOWN", font=ctk.CTkFont(size=11, weight="bold"), height=35, fg_color="#FFFFFF", text_color="#111111", state="disabled", corner_radius=0, border_width=3, border_color="#000000")
+        self.step_1 = ctk.CTkButton(self.stepper_frame, text="1. DOWN", font=ctk.CTkFont(size=11, weight="bold"), height=35, fg_color="#FFFFFF", text_color="#111111", text_color_disabled="#777777", state="disabled", corner_radius=0, border_width=3, border_color="#000000")
         self.step_1.grid(row=0, column=0, padx=(0, 5), sticky="ew")
         
-        self.step_2 = ctk.CTkButton(self.stepper_frame, text="2. AI", font=ctk.CTkFont(size=11, weight="bold"), height=35, fg_color="#FFFFFF", text_color="#111111", state="disabled", corner_radius=0, border_width=3, border_color="#000000")
+        self.step_2 = ctk.CTkButton(self.stepper_frame, text="2. AI", font=ctk.CTkFont(size=11, weight="bold"), height=35, fg_color="#FFFFFF", text_color="#111111", text_color_disabled="#777777", state="disabled", corner_radius=0, border_width=3, border_color="#000000")
         self.step_2.grid(row=0, column=1, padx=5, sticky="ew")
         
-        self.step_3 = ctk.CTkButton(self.stepper_frame, text="3. MEDIA", font=ctk.CTkFont(size=11, weight="bold"), height=35, fg_color="#FFFFFF", text_color="#111111", state="disabled", corner_radius=0, border_width=3, border_color="#000000")
+        self.step_3 = ctk.CTkButton(self.stepper_frame, text="3. MEDIA", font=ctk.CTkFont(size=11, weight="bold"), height=35, fg_color="#FFFFFF", text_color="#111111", text_color_disabled="#777777", state="disabled", corner_radius=0, border_width=3, border_color="#000000")
         self.step_3.grid(row=0, column=2, padx=5, sticky="ew")
         
-        self.step_4 = ctk.CTkButton(self.stepper_frame, text="4. ANKI", font=ctk.CTkFont(size=11, weight="bold"), height=35, fg_color="#FFFFFF", text_color="#111111", state="disabled", corner_radius=0, border_width=3, border_color="#000000")
+        self.step_4 = ctk.CTkButton(self.stepper_frame, text="4. ANKI", font=ctk.CTkFont(size=11, weight="bold"), height=35, fg_color="#FFFFFF", text_color="#111111", text_color_disabled="#777777", state="disabled", corner_radius=0, border_width=3, border_color="#000000")
         self.step_4.grid(row=0, column=3, padx=(5, 0), sticky="ew")
         
         # Play Button
@@ -218,7 +218,7 @@ class AutoAnkiApp:
         ).pack(side="left", padx=5, pady=5)
         
         value_label = ctk.CTkLabel(
-            inner_frame, text="NOT SELECTED", anchor="w", text_color="#888888",
+            inner_frame, text="NOT SELECTED", anchor="w", text_color="#555555",
             font=ctk.CTkFont(size=12, weight="bold"),
         )
         value_label.pack(side="left", fill="x", expand=True, padx=(10, 0))
@@ -256,11 +256,11 @@ class AutoAnkiApp:
     def clear_local_file(self, kind):
         if kind == "Video":
             self.local_video_path = None
-            self.local_video_label.configure(text="NOT SELECTED", text_color="#888888")
+            self.local_video_label.configure(text="NOT SELECTED", text_color="#555555")
             self.url_entry.configure(placeholder_text="Paste YouTube link...")
         else:
             self.local_srt_path = None
-            self.local_srt_label.configure(text="NOT SELECTED", text_color="#888888")
+            self.local_srt_label.configure(text="NOT SELECTED", text_color="#555555")
 
     def open_settings(self):
         """Opens a single window for Anki and local AI integrations."""
@@ -356,24 +356,40 @@ class AutoAnkiApp:
 
         footer = ctk.CTkFrame(window, fg_color="transparent")
         footer.pack(fill="x", padx=20, pady=(0, 20))
-        ctk.CTkButton(footer, text="IMPORT", width=80, height=45, fg_color="#FFFFFF", hover_color="#F4F4F0",
+
+        btn_import_shadow = ctk.CTkFrame(footer, fg_color="#000000", corner_radius=0)
+        btn_import_shadow.pack(side="left", padx=(0, 8))
+        ctk.CTkButton(btn_import_shadow, text="IMPORT", width=80, height=45, fg_color="#FFFFFF", hover_color="#F4F4F0",
                       text_color="#111111", border_width=3, border_color="#000000", corner_radius=0,
-                      font=ctk.CTkFont(size=14, weight="bold"), command=self.import_settings).pack(side="left", padx=(0, 8))
-        ctk.CTkButton(footer, text="EXPORT", width=80, height=45, fg_color="#FFFFFF", hover_color="#F4F4F0",
+                      font=ctk.CTkFont(size=14, weight="bold"), command=self.import_settings).pack(padx=(0, 4), pady=(0, 4))
+
+        btn_export_shadow = ctk.CTkFrame(footer, fg_color="#000000", corner_radius=0)
+        btn_export_shadow.pack(side="left")
+        ctk.CTkButton(btn_export_shadow, text="EXPORT", width=80, height=45, fg_color="#FFFFFF", hover_color="#F4F4F0",
                       text_color="#111111", border_width=3, border_color="#000000", corner_radius=0,
-                      font=ctk.CTkFont(size=14, weight="bold"), command=self.export_settings).pack(side="left")
-        ctk.CTkButton(footer, text="CANCEL", width=120, height=45, fg_color="#FF3366", hover_color="#E60039",
+                      font=ctk.CTkFont(size=14, weight="bold"), command=self.export_settings).pack(padx=(0, 4), pady=(0, 4))
+
+        btn_cancel_shadow = ctk.CTkFrame(footer, fg_color="#000000", corner_radius=0)
+        btn_cancel_shadow.pack(side="right", padx=(8, 0))
+        ctk.CTkButton(btn_cancel_shadow, text="CANCEL", width=120, height=45, fg_color="#FF3366", hover_color="#E60039",
                       text_color="white", border_width=3, border_color="#000000", corner_radius=0,
-                      font=ctk.CTkFont(size=14, weight="bold"), command=window.destroy).pack(side="right", padx=(8, 0))
-        ctk.CTkButton(footer, text="SAVE", width=140, height=45, fg_color="#3366FF", hover_color="#1A4DE5",
+                      font=ctk.CTkFont(size=14, weight="bold"), command=window.destroy).pack(padx=(0, 4), pady=(0, 4))
+
+        btn_save_shadow = ctk.CTkFrame(footer, fg_color="#000000", corner_radius=0)
+        btn_save_shadow.pack(side="right")
+        ctk.CTkButton(btn_save_shadow, text="SAVE", width=140, height=45, fg_color="#3366FF", hover_color="#1A4DE5",
                       text_color="white", border_width=3, border_color="#000000", corner_radius=0,
-                      font=ctk.CTkFont(size=14, weight="bold"), command=self.save_settings).pack(side="right")
+                      font=ctk.CTkFont(size=14, weight="bold"), command=self.save_settings).pack(padx=(0, 4), pady=(0, 4))
 
     def _settings_entry(self, parent, label, key, show=None, width=None, side=None):
         frame = ctk.CTkFrame(parent, fg_color="transparent")
         frame.pack(fill="x" if side is None else None, padx=14 if side is None else 4,
                    pady=(10, 0), side=side)
         ctk.CTkLabel(frame, text=label.upper(), text_color="#111111", font=ctk.CTkFont(size=13, weight="bold")).pack(anchor="w")
+
+        shadow_frame = ctk.CTkFrame(frame, fg_color="#000000", corner_radius=0)
+        shadow_frame.pack(fill="x" if width is None else None, pady=(3, 0))
+
         entry_options = {
             "textvariable": self.settings_vars[key], "height": 45,
             "fg_color": "#FFFFFF", "border_width": 3, "border_color": "#000000",
@@ -383,8 +399,8 @@ class AutoAnkiApp:
             entry_options["show"] = show
         if width is not None:
             entry_options["width"] = width
-        entry = ctk.CTkEntry(frame, **entry_options)
-        entry.pack(fill="x" if width is None else None, pady=(3, 0))
+        entry = ctk.CTkEntry(shadow_frame, **entry_options)
+        entry.pack(fill="x" if width is None else None, expand=True, padx=(0, 4), pady=(0, 4))
         return entry
 
     def _settings_combo(self, parent, label, key, values, side=None):
@@ -392,13 +408,17 @@ class AutoAnkiApp:
         frame.pack(fill="x" if side is None else None, padx=14 if side is None else 4,
                    pady=(10, 0), side=side)
         ctk.CTkLabel(frame, text=label.upper(), text_color="#111111", font=ctk.CTkFont(size=13, weight="bold")).pack(anchor="w")
-        combo = ctk.CTkComboBox(frame, variable=self.settings_vars[key], values=values, height=45,
+
+        shadow_frame = ctk.CTkFrame(frame, fg_color="#000000", corner_radius=0)
+        shadow_frame.pack(fill="x" if side is None else None, pady=(3, 0))
+
+        combo = ctk.CTkComboBox(shadow_frame, variable=self.settings_vars[key], values=values, height=45,
                                 width=112 if side else 200, fg_color="#FFFFFF", border_width=3,
                                 border_color="#000000", corner_radius=0, text_color="#111111",
                                 font=ctk.CTkFont(size=14, weight="bold"),
                                 button_color="#FFFFFF", button_hover_color="#EAEAEA",
                                 dropdown_fg_color="#FFFFFF", dropdown_text_color="#111111")
-        combo.pack(fill="x" if side is None else None, pady=(3, 0))
+        combo.pack(fill="x" if side is None else None, expand=True, padx=(0, 4), pady=(0, 4))
         return combo
 
     def save_settings(self):
@@ -506,11 +526,11 @@ class AutoAnkiApp:
         steps = [self.step_1, self.step_2, self.step_3, self.step_4]
         # Clear all
         for btn in steps:
-            btn.configure(fg_color="#FFFFFF", text_color="#111111")
+            btn.configure(fg_color="#FFFFFF", text_color_disabled="#777777")
             
         # Light up the current one
         if 1 <= step_number <= 4:
-            steps[step_number - 1].configure(fg_color="#FF3366", text_color="white")
+            steps[step_number - 1].configure(fg_color="#FF3366", text_color_disabled="white")
         
     def _log_sniffer(self, string):
         s = string.lower()
@@ -718,31 +738,39 @@ class AutoAnkiApp:
             initial_label = slot_to_label.get(field_to_slot.get(field), "Do not fill")
             variable = ctk.StringVar(value=initial_label)
             self.field_mapping_vars[field] = variable
+            combo_shadow = ctk.CTkFrame(list_frame, fg_color="#000000", corner_radius=0)
+            combo_shadow.grid(row=row, column=1, padx=(0, 10), pady=10, sticky="ew")
             ctk.CTkComboBox(
-                list_frame, variable=variable, values=list(source_labels.keys()),
+                combo_shadow, variable=variable, values=list(source_labels.keys()),
                 state="readonly", height=45, fg_color="#FFFFFF", border_width=3, border_color="#000000",
                 dropdown_fg_color="#FFFFFF", dropdown_text_color="#111111", text_color="#111111",
                 font=ctk.CTkFont(size=13, weight="bold"), corner_radius=0, button_color="#FFFFFF", button_hover_color="#EAEAEA"
-            ).grid(row=row, column=1, padx=(0, 10), pady=10, sticky="ew")
+            ).pack(fill="x", expand=True, padx=(0, 4), pady=(0, 4))
 
         ctk.CTkLabel(
             window,
             text="EACH CONTENT TYPE CAN BE ASSIGNED TO ONLY ONE FIELD.",
-            text_color="#888888", font=ctk.CTkFont(size=11, weight="bold"),
+            text_color="#555555", font=ctk.CTkFont(size=11, weight="bold"),
         ).pack(anchor="w", padx=24, pady=(0, 10))
 
         footer = ctk.CTkFrame(window, fg_color="transparent")
         footer.pack(fill="x", padx=20, pady=(0, 20))
+
+        btn_back_shadow = ctk.CTkFrame(footer, fg_color="#000000", corner_radius=0)
+        btn_back_shadow.pack(side="right", padx=(8, 0))
         ctk.CTkButton(
-            footer, text="BACK", width=100, height=45, fg_color="#FF3366", hover_color="#E60039",
+            btn_back_shadow, text="BACK", width=100, height=45, fg_color="#FF3366", hover_color="#E60039",
             text_color="white", border_width=3, border_color="#000000", corner_radius=0, font=ctk.CTkFont(size=14, weight="bold"),
             command=window.destroy,
-        ).pack(side="right", padx=(8, 0))
+        ).pack(padx=(0, 4), pady=(0, 4))
+
+        btn_confirm_shadow = ctk.CTkFrame(footer, fg_color="#000000", corner_radius=0)
+        btn_confirm_shadow.pack(side="right")
         ctk.CTkButton(
-            footer, text="CONFIRM AND START", width=200, height=45, fg_color="#3366FF", hover_color="#1A4DE5",
+            btn_confirm_shadow, text="CONFIRM AND START", width=200, height=45, fg_color="#3366FF", hover_color="#1A4DE5",
             text_color="white", border_width=3, border_color="#000000", corner_radius=0, font=ctk.CTkFont(size=14, weight="bold"),
             command=lambda: self._confirm_field_preview(url, deck, model),
-        ).pack(side="right")
+        ).pack(padx=(0, 4), pady=(0, 4))
 
     def _confirm_field_preview(self, url, deck, model):
         field_mapping = {}
