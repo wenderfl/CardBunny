@@ -3,8 +3,8 @@ import shutil
 import uuid
 import pysrt
 
-from auto_anki import media_processor
-from auto_anki.media_processor import slice_and_export_to_anki
+from cardbunny import media_processor
+from cardbunny.media_processor import slice_and_export_to_anki
 
 def test_slicing():
     print("Testing ffmpeg slicing...")

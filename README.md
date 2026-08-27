@@ -17,14 +17,14 @@ O CardBunny transforma cenas de vídeos em cards do Anki com:
 ## Interface
 
 <p align="center">
-  <img src="assets/ui-preview.png" width="760" alt="Interface neo-brutalista do Auto Movies Anki">
+  <img src="assets/ui-preview.png" width="760" alt="Interface neo-brutalista do CardBunny">
 </p>
 
 > A imagem mostra a tela principal e a janela de configurações. A interface segue uma identidade neo-brutalista com alto contraste, bordas marcadas e indicadores visuais para cada etapa do processamento.
 
 ## O que o aplicativo faz
 
-O Auto Movies Anki recebe um vídeo do YouTube ou um arquivo local, identifica os diálogos e cria cards contendo:
+O CardBunny recebe um vídeo do YouTube ou um arquivo local, identifica os diálogos e cria cards contendo:
 
 - frase original;
 - tradução;
@@ -78,7 +78,7 @@ venv\Scripts\python.exe main.py
 ## Como usar
 
 1. Abra o Anki e confirme que o AnkiConnect está ativo.
-2. Inicie o Auto Movies Anki.
+2. Inicie o CardBunny.
 3. Cole uma URL do YouTube ou selecione um vídeo local.
 4. Opcionalmente, selecione uma legenda original em `.srt`.
 5. Escolha o deck e o tipo de nota.
@@ -179,13 +179,13 @@ O aplicativo interrompe o lote e tenta reverter as notas e mídias enviadas naqu
 Com as dependências e o PyInstaller instalados no ambiente virtual:
 
 ```powershell
-venv\Scripts\pyinstaller.exe --noconfirm AutoAnki.spec
+venv\Scripts\pyinstaller.exe --noconfirm CardBunny.spec
 ```
 
 O resultado é gerado em:
 
 ```text
-dist\AutoAnki\AutoAnki.exe
+dist\CardBunny\CardBunny.exe
 ```
 
-Distribua a pasta `dist\AutoAnki` completa, pois o executável depende dos arquivos presentes em `_internal`.
+Distribua a pasta `dist\CardBunny` completa, pois o executável depende dos arquivos presentes em `_internal`.

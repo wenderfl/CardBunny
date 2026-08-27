@@ -9,10 +9,10 @@ import re
 import winsound
 from ui.icons import create_link_icon, create_deck_icon, create_model_icon, create_play_icon, create_wait_icon, create_settings_icon
 from ui.redirector import StdoutRedirector
-from auto_anki.config import CONFIG, save_config
-from auto_anki.anki_client import invoke_anki
-from auto_anki.orchestrator import run_pipeline
-from auto_anki.mapper import _map_fields_heuristic
+from cardbunny.config import CONFIG, save_config
+from cardbunny.anki_client import invoke_anki
+from cardbunny.orchestrator import run_pipeline
+from cardbunny.mapper import _map_fields_heuristic
 
 def resource_path(relative_path):
     try:
@@ -25,10 +25,10 @@ def resource_path(relative_path):
 ctk.set_appearance_mode("Light")
 ctk.set_default_color_theme("blue")
 
-class AutoAnkiApp:
+class CardBunnyApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Auto Movies Anki")
+        self.root.title("CardBunny")
         self.root.geometry("450x720")
         self.root.minsize(450, 680)
 
@@ -56,7 +56,7 @@ class AutoAnkiApp:
         self.brand_frame.grid(row=0, column=0, sticky="ew", padx=30, pady=(30, 20))
 
         self.app_title_label = ctk.CTkLabel(
-            self.brand_frame, text="AUTO MOVIES\nANKI", 
+            self.brand_frame, text="CARD\nBUNNY",
             font=ctk.CTkFont(family="Arial", size=26, weight="bold"), 
             text_color="#111111", justify="left"
         )
@@ -922,5 +922,5 @@ def launch_gui():
         except Exception:
             pass
 
-    app = AutoAnkiApp(root)
+    app = CardBunnyApp(root)
     root.mainloop()

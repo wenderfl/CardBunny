@@ -2,7 +2,7 @@ import math
 import os
 import time
 
-from auto_anki.transcriber import _normalize_segments, _write_and_validate_srt
+from cardbunny.transcriber import _normalize_segments, _write_and_validate_srt
 
 class MockSegment:
     def __init__(self, start, end, text):

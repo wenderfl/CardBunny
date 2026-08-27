@@ -1,7 +1,7 @@
 import os
 import pysrt
 import uuid
-from auto_anki.media_processor import _validate_subtitles
+from cardbunny.media_processor import _validate_subtitles
 
 def test_slicer_validation():
     print("Testing media_processor subtitle validation...")

@@ -1,4 +1,4 @@
-from auto_anki.transcriber import _recover_uncovered_speech
+from cardbunny.transcriber import _recover_uncovered_speech
 
 class MockModel:
     def transcribe(self, *args, **kwargs):

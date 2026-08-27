@@ -10,7 +10,7 @@ import ctypes
 
 if platform.system() == "Windows":
     try:
-        myappid = 'automoviesanki.app.version1'
+        myappid = 'cardbunny.app.version1'
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
     except Exception:
         pass
@@ -34,7 +34,7 @@ def main():
     multiprocessing.freeze_support()
     # Optional: Allow command-line usage
     if len(sys.argv) == 2:
-        from auto_anki.orchestrator import run_pipeline
+        from cardbunny.orchestrator import run_pipeline
         url = sys.argv[1]
         run_pipeline(url)
     else:
