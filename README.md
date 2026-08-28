@@ -1,143 +1,138 @@
 <p align="center">
-  <img src="logo_main.png" width="250" height="250">
-  
+  <img src="assets/logo_main.png" width="250" height="250" alt="CardBunny logo">
 </p>
 
-<h1 align="center">CardBunny</h1>
-AI-Powered Language Learning from Videos with Anki
-
-O CardBunny transforma cenas de vídeos em cards do Anki com:
-
-- Frase original em inglês
-- Tradução em português brasileiro
-- Clipe de vídeo em WebM
-- Áudio da cena em MP3
-- Imagem da cena em JPG
-
-## Interface
+<h1 align="center">CardBunny 🐰</h1>
 
 <p align="center">
-  <img src="assets/ui-preview.png" width="760" alt="Interface neo-brutalista do CardBunny">
+  <strong>AI-powered language learning from videos with Anki</strong>
 </p>
 
-> A imagem mostra a tela principal e a janela de configurações. A interface segue uma identidade neo-brutalista com alto contraste, bordas marcadas e indicadores visuais para cada etapa do processamento.
+<p align="center">
+  <img alt="Platform" src="https://img.shields.io/badge/platform-Windows-blue">
+  <img alt="Python" src="https://img.shields.io/badge/python-3.10%2B-blue">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-green">
+</p>
 
-## O que o aplicativo faz
+CardBunny transforms video scenes into Anki flashcards automatically. It accepts YouTube links or local videos, transcribes dialogue using AI, translates it, and slices the media into digestible, reviewable study cards.
 
-O CardBunny recebe um vídeo do YouTube ou um arquivo local, identifica os diálogos e cria cards contendo:
+---
 
-- frase original;
-- tradução;
-- trecho de vídeo em WebM;
-- áudio da cena em MP3;
-- imagem da cena em JPG;
-- identificador do card.
+## ✨ Features
 
-Antes do processamento, é possível escolher exatamente qual conteúdo será enviado para cada campo do tipo de nota selecionado.
+- 🎥 **Video Slicing**: Automatically generates WebM video clips for each spoken sentence.
+- 🎵 **Audio Extraction**: Saves the exact scene audio in MP3 format.
+- 🖼️ **Scene Snapshots**: Captures a high-quality JPG image of the scene.
+- 📝 **AI Transcription**: Uses **Faster-Whisper** to accurately transcribe spoken dialogue.
+- 🌐 **AI Translation**: Connects to any OpenAI-compatible API to translate sentences into your target language.
+- ⚡ **Seamless Integration**: Directly pushes generated cards and media to Anki via **AnkiConnect**.
 
-## Fluxo de processamento
+---
 
-1. Baixa o vídeo ou utiliza um arquivo local.
-2. Transcreve o áudio com Faster-Whisper.
-3. Audita regiões de voz que ficaram sem texto.
-4. Traduz as falas usando um endpoint compatível com a API da OpenAI.
-5. Gera os clipes, áudios e imagens com FFmpeg.
-6. Envia as mídias e notas ao Anki por meio do AnkiConnect.
+## 🎨 Interface
 
-## Requisitos
+<p align="center">
+  <img src="assets/main_ui.gif" width="760" alt="CardBunny neo-brutalist interface animation">
+  <img src="assets/main_ui.gif" width="760" alt="CardBunny neo-brutalist interface animation">
+</p>
 
-- Windows 10 ou 11;
-- Python 3.10 ou mais recente;
-- Anki aberto com o add-on [AnkiConnect](https://ankiweb.net/shared/info/2055492159);
-- FFmpeg e FFprobe disponíveis no `PATH`;
-- serviço de tradução compatível com a API da OpenAI;
-- conexão com a internet para vídeos do YouTube e para o primeiro download do modelo Whisper.
+CardBunny features a beautiful neo-brutalist interface. Before processing begins, you can visually choose exactly which content should be assigned to each field of your Anki deck.
 
-## Instalação
+---
 
-Clone o repositório e execute:
+## ⚙️ Processing Workflow
+
+1. **Download**: Fetches the video from YouTube or loads a local file.
+2. **Transcribe**: Uses Faster-Whisper to identify and transcribe all speech regions.
+3. **Audit**: Automatically audits and skips non-speech or silent regions.
+4. **Translate**: Pushes the dialogue through an OpenAI-compatible API endpoint.
+5. **Slice**: Uses FFmpeg to generate exact video clips, audio files, and images for every sentence.
+6. **Sync**: Sends the media and notes directly to your Anki deck through AnkiConnect.
+
+---
+
+## 🚀 Getting Started
+
+### Requirements
+- **Windows 10 or 11**
+- **Python 3.10+**
+- **Anki** running with the [AnkiConnect](https://ankiweb.net/shared/info/2055492159) add-on installed
+- **FFmpeg and FFprobe** available in your `PATH`
+- An **OpenAI-compatible** translation service (like Ollama, LMStudio, or OpenAI API)
+
+### Installation
+
+Clone the repository and run the setup script:
 
 ```powershell
 setup.bat
 ```
 
-O script cria o ambiente virtual `venv` e instala as dependências de [requirements.txt](requirements.txt).
+This script creates the `venv` virtual environment and installs all required dependencies.
 
-Para iniciar o aplicativo:
+### Launching
+
+To start the application, simply run:
 
 ```powershell
 run.bat
 ```
 
-Também é possível executar diretamente:
+Or launch it directly using python:
 
 ```powershell
-venv\Scripts\python.exe main.py
+venv\Scripts\python.exe src\main.py
 ```
 
-## Como usar
+---
 
-1. Abra o Anki e confirme que o AnkiConnect está ativo.
-2. Inicie o CardBunny.
-3. Cole uma URL do YouTube ou selecione um vídeo local.
-4. Opcionalmente, selecione uma legenda original em `.srt`.
-5. Escolha o deck e o tipo de nota.
-6. Clique no botão amarelo de iniciar.
-7. Revise o mapeamento dos campos.
-8. Confirme para iniciar o processamento.
+## 📖 Usage Guide
 
-As entradas aceitas são:
+1. Open **Anki** and ensure **AnkiConnect** is active.
+2. Start **CardBunny**.
+3. Paste a **YouTube URL** or select a **Local Video**.
+4. *(Optional)* Select a local `.srt` subtitle file to bypass transcription.
+5. Choose your target **Deck** and **Note Type**.
+6. Map the generated content (Video, Audio, Source Text, Translation) to your Anki fields.
+7. Click the **Play** button to begin processing!
 
-- URL do YouTube;
-- vídeo local;
-- URL com legenda local;
-- vídeo e legenda locais.
+### Supported Inputs:
+- YouTube URL
+- Local video file
+- YouTube URL + Local subtitles
+- Local video + Local subtitles
 
-## Configurações
+---
 
-O botão de engrenagem abre três grupos de configuração:
+## 🛠️ Configuration
 
-| Seção | Opções |
+Click the **Gear** icon in the app to configure your integrations:
+
+| Section | Options |
 | --- | --- |
-| Anki | Endereço do AnkiConnect, deck padrão e tipo de nota |
-| Local AI | Endpoint, modelo de tradução, chave de API, modelo Whisper, dispositivo, precisão e threads |
-| Languages | Idioma do vídeo e idioma de destino da tradução |
+| **Anki** | AnkiConnect address, default deck, and default note type. |
+| **Local AI** | Endpoint, translation model, API key, Whisper model size, compute device, precision, and CPU threads. |
+| **Languages** | Video source language and target translation language. |
 
-As configurações são armazenadas em `config.json`. A interface também permite importar e exportar configurações em JSON.
+> **Note**: Settings are saved in `config.json`. You can easily import/export settings directly from the interface.
 
-### Whisper
-
-Uma configuração equilibrada para CPU é:
-
+### Recommended Whisper Settings
+For a balanced CPU configuration, we recommend:
 ```json
 {
-  "model_size": "medium.en",
+  "model_size": "medium",
   "device": "cpu",
   "compute_type": "int8",
   "cpu_threads": 8
 }
 ```
+*The model is downloaded automatically on first use. Use `small` for faster processing, or `large-v3` for maximum accuracy.*
 
-O modelo é baixado automaticamente na primeira execução. Para priorizar velocidade, utilize `small.en`; para priorizar precisão, utilize `medium.en` ou um modelo maior compatível com o hardware.
+---
 
-## Mapeamento dos campos
+## 📂 Temporary Files
 
-Cada campo do tipo de nota pode receber um dos seguintes conteúdos:
-
-- áudio da cena;
-- clipe de vídeo;
-- imagem da cena;
-- legenda original;
-- legenda traduzida;
-- identificador do card;
-- nenhum conteúdo.
-
-O mapeamento é salvo separadamente para cada tipo de nota.
-
-## Arquivos temporários
-
-Cada execução cria uma pasta de trabalho:
-
+CardBunny creates a temporary workspace for each run:
 ```text
 workspace_<id>/
 ├── video.mp4
@@ -149,43 +144,26 @@ workspace_<id>/
     ├── *.mp3
     └── *.jpg
 ```
+When processing finishes successfully, the application will prompt you to clean up or preserve these files.
 
-Ao terminar, o aplicativo permite excluir ou preservar essa pasta.
+---
 
-## Solução de problemas
+## ❓ Troubleshooting
 
-### O aplicativo não encontra o Anki
+- **Cannot find Anki**: Open Anki, ensure AnkiConnect is installed, and check that the default address is `http://127.0.0.1:8765`.
+- **Translation service not responding**: Open settings and verify your Endpoint URL, Model Name, and API Key.
+- **First run is very slow**: The Whisper model must be downloaded on its first run. It will be cached locally for all subsequent runs.
+- **Batch failed partway**: CardBunny automatically halts the batch and attempts to roll back any notes/media sent during that run to prevent incomplete cards.
 
-Abra o Anki, confirme que o AnkiConnect está instalado e teste o endereço padrão:
+---
 
-```text
-http://127.0.0.1:8765
-```
+## 📦 Building for Windows
 
-### O serviço de tradução não responde
-
-Confira na tela de configurações se o endpoint, o modelo e a chave de API correspondem ao serviço local utilizado.
-
-### O primeiro processamento demora
-
-O modelo Whisper precisa ser baixado na primeira utilização. Depois disso, ele permanece no cache local.
-
-### Um lote falhou pela metade
-
-O aplicativo interrompe o lote e tenta reverter as notas e mídias enviadas naquela execução, evitando a criação de um deck incompleto.
-
-## Build para Windows
-
-Com as dependências e o PyInstaller instalados no ambiente virtual:
+To generate a standalone `.exe`, ensure you have installed the PyInstaller dependencies inside the virtual environment and run:
 
 ```powershell
 venv\Scripts\pyinstaller.exe --noconfirm CardBunny.spec
 ```
 
-O resultado é gerado em:
-
-```text
-dist\CardBunny\CardBunny.exe
-```
-
-Distribua a pasta `dist\CardBunny` completa, pois o executável depende dos arquivos presentes em `_internal`.
+The resulting build will be located at `dist\CardBunny\CardBunny.exe`.
+*(Note: Always distribute the complete `dist\CardBunny` directory, as the executable depends on the `_internal` folder).*

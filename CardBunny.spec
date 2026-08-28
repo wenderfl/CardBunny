@@ -4,12 +4,12 @@ from PyInstaller.utils.hooks import collect_data_files
 
 
 a = Analysis(
-    ['main.py'],
+    ['src/main.py'],
     pathex=[],
     binaries=[],
     datas=[
         ('config.json', '.'),
-        ('icon.ico', '.'),
+        ('assets/icon.ico', 'assets'),
     ] + collect_data_files('customtkinter') + collect_data_files('faster_whisper'),
     hiddenimports=['hf_xet'],
     hookspath=[],
@@ -37,7 +37,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['icon.ico'],
+    icon=['assets/icon.ico'],
 )
 coll = COLLECT(
     exe,

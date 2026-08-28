@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+build/
+dist/
+workspace_*/
+.env
