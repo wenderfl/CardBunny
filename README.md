@@ -32,11 +32,9 @@ CardBunny transforms video scenes into Anki flashcards automatically. It accepts
 ## 🎨 Interface
 
 <p align="center">
-  <img src="assets/main_ui.gif" width="760" alt="CardBunny neo-brutalist interface animation">
-  <img src="assets/main_ui.gif" width="760" alt="CardBunny neo-brutalist interface animation">
+  <img src="assets/main_ui.gif" width="400" alt="CardBunny  interface animation">
+  <img src="assets/set_ui.gif" width="400" alt="CardBunny interface animation">
 </p>
-
-CardBunny features a beautiful neo-brutalist interface. Before processing begins, you can visually choose exactly which content should be assigned to each field of your Anki deck.
 
 ---
 
