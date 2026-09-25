@@ -163,5 +163,15 @@ To generate a standalone `.exe`, ensure you have installed the PyInstaller depen
 venv\Scripts\pyinstaller.exe --noconfirm CardBunny.spec
 ```
 
+## Star History
+
+<a href="https://www.star-history.com/?repos=wenderfl%2Fcardbunny&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=wenderfl/cardbunny&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=wenderfl/cardbunny&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=wenderfl/cardbunny&type=date&legend=top-left" />
+ </picture>
+</a>
+
 The resulting build will be located at `dist\CardBunny\CardBunny.exe`.
 *(Note: Always distribute the complete `dist\CardBunny` directory, as the executable depends on the `_internal` folder).*
